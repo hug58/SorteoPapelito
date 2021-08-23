@@ -10,13 +10,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, username, email, password=None):
+    def create_user(self, username, email, password=None, **kwargs):
         if username is None:
             raise TypeError('Users should have a username')
         if email is None:
             raise TypeError('Users should have a Email')
 
-        user = self.model(username=username, email=self.normalize_email(email))
+        user = self.model(username=username, email=self.normalize_email(email), **kwargs)
         user.set_password(password)
         user.save()
         return user
@@ -32,13 +32,32 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
+MAN = 0
+WOMAN = 1
+OTHER = 2
+
+
+SEX_CHOICES = (
+    (MAN, 'Man'),
+    (WOMAN,'Woman'),
+    (OTHER, 'Other'),
+)
+
+
+
+
+class User(AbstractBaseUser,PermissionsMixin):
     username = models.CharField(max_length=255, unique=True, db_index=True)
     email = models.EmailField(max_length=255, unique=True, db_index=True)
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+
+    address = models.CharField(max_length=255,null=True, blank=True)
+    phone =  models.CharField(max_length=13, null=True, blank=True)
+    sex = models.SmallIntegerField(default=SEX_CHOICES[2], choices=SEX_CHOICES)
+
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

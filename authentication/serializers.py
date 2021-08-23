@@ -9,16 +9,20 @@ from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnico
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'username','address','phone','sex']
+
+
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        max_length=68, min_length=6, write_only=True)
 
     default_error_messages = {
         'username': 'The username should only contain alphanumeric characters'}
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'password']
+        fields = ['email', 'username','address','phone','sex']
 
     def validate(self, attrs):
         email = attrs.get('email', '')
@@ -40,7 +44,19 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
         model = User
         fields = ['token']
 
+class ResetPasswordEmailRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(min_length=2)
 
+    class Meta:
+        fields = ['email']
+
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(
+        min_length=6, max_length=68, write_only=True)
+
+    class Meta:
+        fields = ['password']
 
 
 

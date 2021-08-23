@@ -19,6 +19,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from .views import SelectWinner
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -37,5 +38,6 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/',include('authentication.urls')),
+    path('api/winner',SelectWinner.as_view()),
     path('', schema_view.with_ui('swagger')),
 ]

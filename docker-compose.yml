@@ -1,0 +1,38 @@
+version: '3.9'
+
+services: 
+    redis:
+       image: redis
+       env_file: .env
+
+    celery:
+        restart: always
+        env_file: .env
+        build:
+            context: .
+        command: celery -A SorteoPapel worker -l INFO
+
+        depends_on: 
+            - redis
+        links:
+            - redis
+
+
+    web:
+        build: 
+            context: .
+        env_file: .env
+        volumes: 
+            - .:/code
+        command:  sh -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+        ports:
+            - "8000:8000"
+
+
+        depends_on: 
+            - redis
+        links:
+            - redis
+
+
+
