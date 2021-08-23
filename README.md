@@ -25,11 +25,6 @@ en el example.env cambia las auth del servidor de correo
 ```
 
 
-## Para desmotar la imagen usa el comando
-
-```bash
-  docker-compose down -v
-```
 
 ### Registrar un usuario
 Ejemplo:
@@ -109,3 +104,11 @@ El response(como solo hay un concursante, pues obviamente el ganador es mohu) :
 
 En raiz (http://localhost:8000/) esta instalado el doc, mucho mas facil de seguir. Ten en cuenta que se usa Bearer para
 la autenticacion
+
+
+## Para desmontar la imagen usa el comando
+
+```bash
+  docker-compose down -v
+```
+
